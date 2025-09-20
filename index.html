@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>TravelEase Pro - Ultimate Travel Experience</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9C%88%EF%B8%8F%3C/text%3E%3C/svg%3E">
+
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="floating-shapes" id="floatingShapes"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="brand">
+                <h1>✈️ TravelEase Pro</h1>
+                <p class="tagline">Experience the Future of Travel Booking</p>
+            </div>
+            <div class="header-actions">
+                <input id="searchGlobal" placeholder="Search bookings, destinations or tips..." />
+                <button id="openAnalyticsBtn" class="db-btn">Analytics</button>
+            </div>
+        </header>
+
+        <div class="search-section">
+            <div class="search-tabs" role="tablist">
+                <button class="tab active" data-type="flights">✈️ Flights</button>
+                <button class="tab" data-type="hotels">🏨 Hotels</button>
+                <button class="tab" data-type="packages">📦 Packages</button>
+            </div>
+
+            <form class="search-form" id="searchForm">
+                <div class="form-group">
+                    <label for="from">From</label>
+                    <input type="text" id="from" name="from" placeholder="Enter departure city" required>
+                </div>
+                <div class="form-group">
+                    <label for="to">To</label>
+                    <input type="text" id="to" name="to" placeholder="Enter destination" required>
+                </div>
+                <div class="form-group">
+                    <label for="checkin">Departure</label>
+                    <input type="date" id="checkin" name="checkin" required>
+                </div>
+                <div class="form-group">
+                    <label for="checkout">Return</label>
+                    <input type="date" id="checkout" name="checkout">
+                </div>
+                <div class="form-group">
+                    <label for="guests">Travelers</label>
+                    <select id="guests" name="guests">
+                        <option value="1">1 Person</option>
+                        <option value="2">2 People</option>
+                        <option value="3">3 People</option>
+                        <option value="4">4 People</option>
+                        <option value="5">5+ People</option>
+                    </select>
+                </div>
+                <button type="submit" class="search-btn">🔍 Search Amazing Deals</button>
+            </form>
+
+            <div class="advanced-controls">
+                <div class="filter-bar">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="price-low">Price: Low to High</button>
+                    <button class="filter-btn" data-filter="price-high">Price: High to Low</button>
+                    <button class="filter-btn" data-filter="rating">Best Rated</button>
+                    <button class="filter-btn" data-filter="duration">Shortest Duration</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-section" id="resultsSection" style="display:none;">
+            <div class="results-header">
+                <h2>✨ Available Options</h2>
+                <div class="results-count" id="resultsCount">Found 0 results</div>
+            </div>
+            <div id="resultsContainer" class="results-grid"></div>
+        </div>
+
+        <!-- Database Management Section -->
+        <div class="database-section">
+            <div class="database-header">
+                <h2 class="database-title">📊 Live Database</h2>
+                <div class="database-controls">
+                    <button class="db-btn" onclick="viewBookings()">View Bookings</button>
+                    <button class="db-btn" onclick="viewUsers()">User Data</button>
+                    <button class="db-btn" onclick="exportData()">Export CSV</button>
+                    <button class="db-btn" onclick="clearDatabase()">Clear All</button>
+                </div>
+            </div>
+
+            <div class="database-table">
+                <div class="table-header">
+                    <div class="table-header-row">
+                        <div>Booking ID</div>
+                        <div>Customer Details</div>
+                        <div>Service</div>
+                        <div>Amount</div>
+                        <div>Date</div>
+                    </div>
+                </div>
+                <div id="databaseContent">
+                    <div class="empty-state">
+                        <div class="empty-icon">📋</div>
+                        <h3>No bookings yet</h3>
+                        <p>Make your first booking to see data here!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>🎯 Complete Your Booking</h2>
+            <div id="bookingDetails"></div>
+
+            <form class="booking-form" id="bookingForm">
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" id="address" name="address">
+                </div>
+                <div class="form-group">
+                    <label>Special Requests</label>
+                    <textarea id="specialRequests" name="specialRequests" rows="3" placeholder="Any special requirements..."></textarea>
+                </div>
+                <button type="submit" class="search-btn">💳 Confirm Booking & Pay</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="confirmation">
+                <h2>🎉 Booking Confirmed!</h2>
+                <div class="booking-id" id="bookingIdDisplay">BK123456</div>
+                <div id="confirmationDetails"></div>
+                <div id="itinerary"></div>
+                <p class="confirmation-message">
+                    📧 Confirmation sent to your email<br>
+                    📱 SMS notification dispatched
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analytics Modal -->
+    <div id="analyticsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>📈 Analytics</h2>
+            <div id="analyticsContent" style="min-height:120px"></div>
+        </div>
+    </div>
+
+    <!-- Scripts (order matters) -->
+    <script src="data.js"></script>
+    <script src="database.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
